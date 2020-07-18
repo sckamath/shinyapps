@@ -1,0 +1,75 @@
+---
+title: "Developing Data Products - Week 4 Assignment"
+author: "Chandrakanth Kamath"
+date: "18 July 2020"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+## Coursera Reproducible Pitch
+
+This project is for Coursera Data Science course - Developing Data Products: week 4. As part of this, a shiny app is developed and deployed it on the shiny server. The link is https://sckamath.shinyapps.io/Cars/. The code can be found at https://github.com/sckamath/shinyapps 
+
+## Overview
+
+The shiny app plots graph against miles per gallon (mpg) for different variables from the mtcars dataset.
+
+```{r}
+head(mtcars)
+```
+
+## UI Code
+
+```{r echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+library(shiny)
+
+shinyUI(fluidPage(
+  
+  # Application title
+  titlePanel("Cars Dataset - Miles per Gallon"),
+  
+  sidebarPanel(
+    
+    radioButtons("variable", "Variable:", 
+                c("Cylinders" = "cyl",
+                  "Transmission" = "am",
+                  "Gears" = "gear"))
+  ),
+  
+  mainPanel(
+    # Output: Formatted text for caption ----
+    h3(textOutput("caption")),
+    
+    # Output: Plot of the requested variable against mpg ----
+    plotOutput("mpgPlot")
+  )
+))
+```
+
+## Server Code
+
+```{r echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+library(shiny)
+library(plotly)
+
+mpgData <- mtcars
+mpgData$am <- factor(mpgData$am, labels = c("Automatic", "Manual"))
+
+shinyServer(function(input, output) {
+  
+  formulaText <- reactive({
+    paste("mpg vs ", input$variable)
+  })
+  
+  output$caption <- renderText({
+    formulaText()
+  })
+
+  output$mpgPlot <- renderPlot({
+    ggplot(mpgData, aes_string(y=input$variable, x="mpg")) + geom_point()
+  })
+  
+})
+```
+
