@@ -1,7 +1,7 @@
 ---
 title: "Developing Data Products - Week 4 Assignment"
-author: "Chandrakanth Kamath"
-date: "18 July 2020"
+author: "sckamath"
+date: "19 July 2020"
 output:
   slidy_presentation: default
   ioslides_presentation: default
@@ -9,19 +9,31 @@ output:
 
 ## Coursera Reproducible Pitch
 
-This project is for Coursera Data Science course - Developing Data Products: week 4. As part of this, a shiny app is developed and deployed it on the shiny server. The link is https://sckamath.shinyapps.io/Cars/. The code can be found at https://github.com/sckamath/shinyapps 
+This project is for Coursera Data Science course - Developing Data Products: week 4. As part of this, a shiny app is developed and deployed it on the shiny server. The link is https://sckamath.shinyapps.io/rshiny/. The code can be found at https://github.com/sckamath/shinyapps 
 
 ## Overview
 
-The shiny app plots graph against miles per gallon (mpg) for different variables from the mtcars dataset.
+The shiny app plots graph against miles per gallon (mpg) for different variables from the mtcars dataset.  The objective of this application is to assist users in selecting cars based on these variables and their requirements.
 
-```{r}
+The data set is as follows:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(car)
 head(mtcars)
+```
+
+## Analysis
+
+Here we can see the relationship between three variables: miles per gallon (mpg), cylinder (cyl), transmission and gears.
+
+```{r echo=FALSE,warning=FALSE, message=FALSE}
+
+scatterplotMatrix(~mpg+cyl+am+gear, data=mtcars, cex.axis=1.5)
 ```
 
 ## UI Code
 
-```{r echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
 library(shiny)
 
 shinyUI(fluidPage(
@@ -49,7 +61,7 @@ shinyUI(fluidPage(
 
 ## Server Code
 
-```{r echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
 library(shiny)
 library(plotly)
 

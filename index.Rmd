@@ -1,0 +1,55 @@
+---
+title: "Developing Data Products - Week 4 Assignment"
+author: "Chandrakanth Kamath"
+date: "19 July 2020"
+runtime: shiny
+output: html_document
+
+---
+
+## Coursera Reproducible Pitch
+
+This project is for Coursera Data Science course - Developing Data Products: week 4. As part of this, a shiny app is deployed at https://sckamath.shinyapps.io/Cars/ on the shiny server. The code can be found at https://github.com/sckamath/shinyapps 
+
+## Overview
+
+This is an interactive version of the Shiny app with live documentation that helps user to navigate through the app. I have used the same UI and Server code.  This app plots graphs against miles per gallon (mpg) for different variables from the mtcars dataset.
+
+The dataset is as follows:
+
+```{r}
+head(mtcars)
+```
+
+Please select the variables such as Cylinders, Transmission and Gears.  Based on these selections the app will generate the miles per gallon as per the selection variables.
+
+```{r, echo=FALSE}
+library(shiny)
+library(ggplot2)
+
+mpgData <- mtcars
+mpgData$am <- factor(mpgData$am, labels = c("Automatic", "Manual"))
+
+  # Application title
+  # titlePanel("Cars Dataset - Miles per Gallon"),
+  
+  inputPanel(
+    
+    radioButtons("variable", "Variable:", 
+                c("Cylinders" = "cyl",
+                  "Transmission" = "am",
+                  "Gears" = "gear"))
+  )
+```
+
+
+This is the graph which indicates the miles per gallon (mpg).  Example: if you select "gears", there are few cars that offer higher mpg with gears >= 5.  You may select various other variables to assess the mpg.
+
+
+```{r, echo=FALSE}
+  renderPlot({
+    ggplot(mpgData, aes_string(y=input$variable, x="mpg")) + geom_point()
+  })
+  
+```
+
